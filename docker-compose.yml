@@ -1,0 +1,39 @@
+services:
+  labelstudio:
+    image: heartexlabs/label-studio:latest
+    container_name: annotation-labelstudio
+    ports:
+      - "8080:8080"
+    volumes:
+      - ls-data:/label-studio/data
+      - ./clips:/label-studio/clips:ro
+    environment:
+      - LABEL_STUDIO_LOCAL_FILES_SERVING_ENABLED=true
+      - LABEL_STUDIO_LOCAL_FILES_DOCUMENT_ROOT=/label-studio
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: annotation-backend
+    depends_on:
+      - labelstudio
+    volumes:
+      - ./data:/app/data
+      - ./clips:/app/clips
+      - ./state:/app/state
+    environment:
+      - LABEL_STUDIO_URL=http://labelstudio:8080
+      - LABEL_STUDIO_API_KEY=${LABEL_STUDIO_API_KEY}
+      - POLL_INTERVAL_SEC=${POLL_INTERVAL_SEC:-20}
+      - CLIPS_PER_WAVE=${CLIPS_PER_WAVE:-20}
+      - SLEEP_CLIPS_PER_WAVE=${SLEEP_CLIPS_PER_WAVE:-3}
+      - DATA_DIR=/app/data
+      - CLIPS_DIR=/app/clips
+      - STATE_DIR=/app/state
+      - CONFIG_PATH=${CONFIG_PATH:-}
+    restart: unless-stopped
+
+volumes:
+  ls-data:
