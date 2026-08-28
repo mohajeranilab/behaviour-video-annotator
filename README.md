@@ -57,6 +57,9 @@ Open the project (**Mouse Behavior Annotation**) in Label Studio:
 1. **Keyboard Shortcut Configuration**: Review or adjust keyboard shortcuts (under UI settings) for video playback (e.g. Space to Play/Pause) and Submit to facilitate annotation process.
 2. **Enable Continuous Flow**: Click **"Label tasks as display"** to start annotation with automatic task loading on submit enabled.
 
+### Step 8: Export Annotation result
+The result can be exported on the UI panel, in the format of your choice (possible options includes json and csv). The metadata will include some of the information generated and stored by the backend controller (e.g. the predicted awakeness of the clip, the wave and index of the clips), and the annotation result as well as the information about the clip itself will also be recorded in the file.
+
 ---
 
 ### Other Tips & Functions
